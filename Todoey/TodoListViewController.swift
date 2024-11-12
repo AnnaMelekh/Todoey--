@@ -23,7 +23,7 @@ class TodoListViewController: UITableViewController {
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         
-        // loadItems()
+         loadItems()
         
     }
     
@@ -51,9 +51,18 @@ class TodoListViewController: UITableViewController {
     // MARK: TableView Delegate methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        let cell = itemArray[indexPath.row]
+        
+//        itemArray[indexPath.row].setValue("completed", forKey: "title")   // changing the title inside the table
         
         itemArray[indexPath.row].done.toggle()
+        
+        
+//  MARK: DELETING and saving the changes
+        
+//        context.delete(itemArray[indexPath.row])
+//        itemArray.remove(at: indexPath.row)
+        
+        
         saveItems()
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -99,18 +108,15 @@ class TodoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    //    func loadItems() {
-    //        if let data = try? Data(contentsOf: dataFilePath!) {
-    //            let decoder = PropertyListDecoder()
-    //
-    //            do {
-    //                itemArray = try decoder.decode([Item].self, from: data)
-    //            } catch {
-    //                print("error of decoding\(error)")
-    //            }
-    //        }
-    
-    //    }
-    
+    func loadItems() {
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+           itemArray = try context.fetch(request)
+        
+        } catch {
+            print("error fetching (loading) context \(error)")
+        }
+    }
 }
+    
 
