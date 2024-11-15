@@ -15,15 +15,14 @@ class TodoListViewController: UITableViewController {
     //    let defaults = UserDefaults.standard
 //    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("items.plist")
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-        
-         loadItems()
+        loadItems()
         
     }
     
@@ -105,18 +104,56 @@ class TodoListViewController: UITableViewController {
             print("error saving context \(error)")
         }
         
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
-    func loadItems() {
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {     // у функции есть аргумент и сразу дефолтное значение аргумента
+ 
         do {
            itemArray = try context.fetch(request)
         
         } catch {
             print("error fetching (loading) context \(error)")
         }
-    }
-}
-    
+        tableView.reloadData()
 
+        
+    }
+    
+}
+  
+// MARK: SearchBar methods
+
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()     //создаем запрос
+
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)   //фильтры запроса. тайтл содержит "фильтр", cd = case, diactric insensitive
+                
+          //вывести результаты тайтл в восходящем (алфавитном) порядке
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        // + перезагрузить таблицу (внутри лоад айтемс)
+
+        loadItems(with: request)
+        
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        if searchBar.text?.count == 0 {
+            loadItems()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()   // убирает клавиатуру, серч бар неактивный
+            }
+        }
+    }
+    
+   
+    
+        
+    
+}
