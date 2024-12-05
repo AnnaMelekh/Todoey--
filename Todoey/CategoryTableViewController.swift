@@ -11,7 +11,7 @@ import CoreData
 
 class CategoryTableViewController: UITableViewController {
 
-    var categoryArray = [Category]()
+    var categories = [Category]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     
@@ -28,7 +28,7 @@ class CategoryTableViewController: UITableViewController {
     // MARK: TableView Datasourse methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryArray.count
+        return categories.count
     }
     
     
@@ -37,7 +37,7 @@ class CategoryTableViewController: UITableViewController {
         //        print("cell for row at")
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
         
-        cell.textLabel!.text = categoryArray[indexPath.row].name
+        cell.textLabel!.text = categories[indexPath.row].name
         
         
 //        cell.accessoryType = item.done == true ? .checkmark : .none
@@ -49,6 +49,18 @@ class CategoryTableViewController: UITableViewController {
     
     // MARK: TableView Delegate methods
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "goToItems", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! TodoListViewController
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationVC.selectedCategory = categories[indexPath.row]
+        }
+        
+    }
     
     
     // MARK: Data manipulation methods
@@ -66,7 +78,7 @@ class CategoryTableViewController: UITableViewController {
     func loadItems(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
  
         do {
-           categoryArray = try context.fetch(request)
+           categories = try context.fetch(request)
         
         } catch {
             print("error fetching (loading) context \(error)")
@@ -87,7 +99,7 @@ class CategoryTableViewController: UITableViewController {
             
             let categor = Category(context: self.context)
             categor.name = textField.text!
-            self.categoryArray.append(categor)
+            self.categories.append(categor)
             
             self.saveItems()
             

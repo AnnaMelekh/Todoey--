@@ -16,13 +16,19 @@ class TodoListViewController: UITableViewController {
 //    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("items.plist")
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
+    var selectedCategory: Category? {
+        didSet {
+            loadItems()
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .white
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-        loadItems()
         
     }
     
@@ -66,6 +72,7 @@ class TodoListViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         
+        
     }
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -80,6 +87,7 @@ class TodoListViewController: UITableViewController {
             let newItem = Item(context: self.context)
             newItem.title = textField.text!
             newItem.done = false
+            newItem.parentCategory = self.selectedCategory
             self.itemArray.append(newItem)
             
             self.saveItems()
@@ -106,8 +114,18 @@ class TodoListViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {     // у функции есть аргумент и сразу дефолтное значение аргумента
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {     // у функции есть аргумент и сразу дефолтное значение аргумента
  
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
+     
+        
         do {
            itemArray = try context.fetch(request)
         
@@ -128,14 +146,14 @@ extension TodoListViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let request: NSFetchRequest<Item> = Item.fetchRequest()     //создаем запрос
 
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)   //фильтры запроса. тайтл содержит "фильтр", cd = case, diactric insensitive
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)   //фильтры запроса. тайтл содержит "фильтр", cd = case, diactric insensitive
                 
           //вывести результаты тайтл в восходящем (алфавитном) порядке
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
         // + перезагрузить таблицу (внутри лоад айтемс)
 
-        loadItems(with: request)
+        loadItems(with: request, predicate: predicate)
         
         
     }
@@ -150,9 +168,5 @@ extension TodoListViewController: UISearchBarDelegate {
             }
         }
     }
-    
    
-    
-        
-    
 }
