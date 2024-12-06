@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,8 @@
 		EB2BE506239524DC00FB933B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB2BE504239524DC00FB933B /* LaunchScreen.storyboard */; };
 		F33717B32CE38C27001EDFC3 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F33717B12CE38C27001EDFC3 /* DataModel.xcdatamodeld */; };
 		F33717B52CE7AACC001EDFC3 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33717B42CE7AACC001EDFC3 /* CategoryTableViewController.swift */; };
+		F360DD072D03B5B9004C54FD /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F360DD062D03B5B9004C54FD /* RealmSwift */; };
+		F360DD092D03B6FB004C54FD /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = F360DD082D03B6FB004C54FD /* Data.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,7 @@
 		EB2BE507239524DC00FB933B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F33717B22CE38C27001EDFC3 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		F33717B42CE7AACC001EDFC3 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
+		F360DD082D03B6FB004C54FD /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F360DD072D03B5B9004C54FD /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +70,7 @@
 				EB2BE504239524DC00FB933B /* LaunchScreen.storyboard */,
 				EB2BE507239524DC00FB933B /* Info.plist */,
 				F33717B12CE38C27001EDFC3 /* DataModel.xcdatamodeld */,
+				F360DD082D03B6FB004C54FD /* Data.swift */,
 			);
 			path = Todoey;
 			sourceTree = "<group>";
@@ -86,6 +91,9 @@
 			dependencies = (
 			);
 			name = Todoey;
+			packageProductDependencies = (
+				F360DD062D03B5B9004C54FD /* RealmSwift */,
+			);
 			productName = Todoey;
 			productReference = EB2BE4F6239524DB00FB933B /* Todoey.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +122,9 @@
 				Base,
 			);
 			mainGroup = EB2BE4ED239524DB00FB933B;
+			packageReferences = (
+				F360DD052D03B5B9004C54FD /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			productRefGroup = EB2BE4F7239524DB00FB933B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -142,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB2BE4FE239524DB00FB933B /* TodoListViewController.swift in Sources */,
+				F360DD092D03B6FB004C54FD /* Data.swift in Sources */,
 				F33717B32CE38C27001EDFC3 /* DataModel.xcdatamodeld in Sources */,
 				EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */,
 				F33717B52CE7AACC001EDFC3 /* CategoryTableViewController.swift in Sources */,
@@ -342,6 +354,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F360DD052D03B5B9004C54FD /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F360DD062D03B5B9004C54FD /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F360DD052D03B5B9004C54FD /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		F33717B12CE38C27001EDFC3 /* DataModel.xcdatamodeld */ = {
